@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
@@ -35,7 +36,8 @@ public final class QuoteSyncJob {
     private static final int PERIOD = 300000;
     private static final int INITIAL_BACKOFF = 10000;
     private static final int PERIODIC_ID = 1;
-    private static final int YEARS_OF_HISTORY = 2;
+    private static final int WEEKS_OF_HISTORY = 2;
+    private static final String LOG_TAG = QuoteSyncJob.class.getName();
 
     private QuoteSyncJob() {
     }
@@ -46,7 +48,8 @@ public final class QuoteSyncJob {
 
         Calendar from = Calendar.getInstance();
         Calendar to = Calendar.getInstance();
-        from.add(Calendar.YEAR, -YEARS_OF_HISTORY);
+        //from.add(Calendar.YEAR, -YEARS_OF_HISTORY);
+        from.add(Calendar.WEEK_OF_YEAR, -WEEKS_OF_HISTORY);
 
         try {
 
@@ -81,12 +84,16 @@ public final class QuoteSyncJob {
 
                 // WARNING! Don't request historical data for a stock that doesn't exist!
                 // The request will hang forever X_x
-                List<HistoricalQuote> history = stock.getHistory(from, to, Interval.WEEKLY);
+                List<HistoricalQuote> history = stock.getHistory(from, to, Interval.DAILY);
 
                 StringBuilder historyBuilder = new StringBuilder();
 
                 for (HistoricalQuote it : history) {
                     historyBuilder.append(it.getDate().getTimeInMillis());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTimeInMillis(it.getDate().getTimeInMillis());
+                    Log.d(LOG_TAG,"History == "+cal.get(Calendar.DATE)+", "+cal.get(Calendar.MONTH)+", "+cal.get(Calendar.YEAR));
+                    Log.d(LOG_TAG,"Closing value == "+it.getClose());
                     historyBuilder.append(", ");
                     historyBuilder.append(it.getClose());
                     historyBuilder.append("\n");

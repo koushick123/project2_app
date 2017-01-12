@@ -33,8 +33,8 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
         this.context = context;
         this.clickHandler = clickHandler;
 
-        dollarFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
-        dollarFormatWithPlus = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
+        dollarFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.getDefault());
+        dollarFormatWithPlus = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.getDefault());
         dollarFormatWithPlus.setPositivePrefix("+$");
         percentageFormat = (DecimalFormat) NumberFormat.getPercentInstance(Locale.getDefault());
         percentageFormat.setMaximumFractionDigits(2);

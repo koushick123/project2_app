@@ -19,10 +19,19 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 import com.udacity.stockhawk.sync.QuoteSyncJob;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,7 +87,29 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         }).attachToRecyclerView(stockRecyclerView);
 
+        // programmatically create a LineChart
+        LineChart chart = (LineChart)findViewById(R.id.chart);
 
+        List<Entry> valsComp1 = new ArrayList<Entry>();
+        Entry c1e1 = new Entry(0f, 100000f); // 0 == quarter 1
+        valsComp1.add(c1e1);
+        Entry c1e2 = new Entry(1f, 140000f); // 1 == quarter 2 ...
+        valsComp1.add(c1e2);
+
+        LineDataSet setComp1 = new LineDataSet(valsComp1, "Company 1");
+        setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
+        // use the interface ILineDataSet
+        List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+        dataSets.add(setComp1);
+        LineData data = new LineData(dataSets);
+        chart.setData(data);
+        chart.invalidate(); // refresh
+
+    }
+
+    public void onClick()
+    {
+        Toast.makeText(getApplicationContext(),"Selected Stock",Toast.LENGTH_SHORT).show();
     }
 
     private boolean networkUp() {
