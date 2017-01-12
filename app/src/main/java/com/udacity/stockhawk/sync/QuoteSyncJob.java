@@ -92,8 +92,8 @@ public final class QuoteSyncJob {
                     historyBuilder.append(it.getDate().getTimeInMillis());
                     Calendar cal = Calendar.getInstance();
                     cal.setTimeInMillis(it.getDate().getTimeInMillis());
-                    Log.d(LOG_TAG,"History == "+cal.get(Calendar.DATE)+", "+cal.get(Calendar.MONTH)+", "+cal.get(Calendar.YEAR));
-                    Log.d(LOG_TAG,"Closing value == "+it.getClose());
+                    //Log.d(LOG_TAG,"History == "+cal.get(Calendar.DATE)+", "+cal.get(Calendar.MONTH)+", "+cal.get(Calendar.YEAR));
+                    //Log.d(LOG_TAG,"Closing value == "+it.getClose());
                     historyBuilder.append(", ");
                     historyBuilder.append(it.getClose());
                     historyBuilder.append("\n");

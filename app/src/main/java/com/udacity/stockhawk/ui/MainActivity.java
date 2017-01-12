@@ -15,7 +15,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         }).attachToRecyclerView(stockRecyclerView);
 
-        // programmatically create a LineChart
+        /*// programmatically create a LineChart
         LineChart chart = (LineChart)findViewById(R.id.chart);
 
         List<Entry> valsComp1 = new ArrayList<Entry>();
@@ -103,13 +105,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         dataSets.add(setComp1);
         LineData data = new LineData(dataSets);
         chart.setData(data);
-        chart.invalidate(); // refresh
+        chart.invalidate(); // refresh*/
 
-    }
-
-    public void onClick()
-    {
-        Toast.makeText(getApplicationContext(),"Selected Stock",Toast.LENGTH_SHORT).show();
     }
 
     private boolean networkUp() {

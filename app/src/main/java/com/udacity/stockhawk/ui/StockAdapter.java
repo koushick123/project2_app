@@ -4,6 +4,7 @@ package com.udacity.stockhawk.ui;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,13 @@ import com.udacity.stockhawk.data.PrefUtils;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Calendar;
 import java.util.Locale;
+import java.util.Timer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
 
@@ -69,7 +73,6 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
 
         holder.symbol.setText(cursor.getString(Contract.Quote.POSITION_SYMBOL));
         holder.price.setText(dollarFormat.format(cursor.getFloat(Contract.Quote.POSITION_PRICE)));
-
 
         float rawAbsoluteChange = cursor.getFloat(Contract.Quote.POSITION_ABSOLUTE_CHANGE);
         float percentageChange = cursor.getFloat(Contract.Quote.POSITION_PERCENTAGE_CHANGE);
@@ -130,6 +133,8 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
             cursor.moveToPosition(adapterPosition);
             int symbolColumn = cursor.getColumnIndex(Contract.Quote.COLUMN_SYMBOL);
             clickHandler.onClick(cursor.getString(symbolColumn));
+            Timber.d("Stock symbol == "+cursor.getString(Contract.Quote.POSITION_SYMBOL));
+            Timber.d("Stock prices history == "+cursor.getString(Contract.Quote.POSITION_HISTORY));
 
         }
 
