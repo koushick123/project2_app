@@ -4,7 +4,6 @@ package com.udacity.stockhawk.ui;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Timer;
+import java.util.StringTokenizer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -107,7 +106,7 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
 
 
     interface StockAdapterOnClickHandler {
-        void onClick(String symbol);
+        void onClick(String symbol, String history);
     }
 
     class StockViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -132,10 +131,17 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
             int adapterPosition = getAdapterPosition();
             cursor.moveToPosition(adapterPosition);
             int symbolColumn = cursor.getColumnIndex(Contract.Quote.COLUMN_SYMBOL);
-            clickHandler.onClick(cursor.getString(symbolColumn));
-            Timber.d("Stock symbol == "+cursor.getString(Contract.Quote.POSITION_SYMBOL));
-            Timber.d("Stock prices history == "+cursor.getString(Contract.Quote.POSITION_HISTORY));
-
+            clickHandler.onClick(cursor.getString(symbolColumn), cursor.getString(Contract.Quote.POSITION_HISTORY));
+            //Timber.d("Stock symbol == "+cursor.getString(Contract.Quote.POSITION_SYMBOL));
+            StringTokenizer token = new StringTokenizer(cursor.getString(Contract.Quote.POSITION_HISTORY),"\n");
+            /*while(token.hasMoreTokens()){
+                StringTokenizer stock = new StringTokenizer(token.nextToken(),",");
+                Calendar endDate = Calendar.getInstance();
+                String stockDates = stock.nextToken();
+                endDate.setTimeInMillis(new Long(stockDates).longValue());
+                Timber.d("Stock history == "+endDate.get(Calendar.DATE)+", "+endDate.get(Calendar.MONTH)+", "+endDate.get(Calendar.YEAR));
+                Timber.d("Stock history close value== "+stock.nextToken());
+            }*/
         }
 
 
