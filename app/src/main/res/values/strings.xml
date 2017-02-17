@@ -33,4 +33,7 @@
     <string name="toast_stock_added_no_connectivity">Symbol %s added. Will refresh when network available.</string>
     <string name="toast_no_connectivity">Will refresh when network available.</string>
 
+    <string name="xaxis_label">Time Period</string>
+    <string name="yaxis_label">Value of Stock</string>
+
 </resources>

@@ -33,4 +33,7 @@
 
     <string name="toast_stock_added_no_connectivity"> سيتم تحديث عندما شبكة المتاحة. وأضاف  %s رمز</string>
     <string name="toast_no_connectivity">سيتم تحديث عندما شبكة المتاحة.</string>
+
+    <string name="xaxis_label">فترة زمنية</string>
+    <string name="yaxis_label">قيمة الأوراق المالية</string>
 </resources>
