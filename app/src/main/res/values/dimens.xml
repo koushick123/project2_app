@@ -3,4 +3,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="y_axis_label_padding_top">200dp</dimen>
     <dimen name="no_width">0dp</dimen>
+    <dimen name="chartHeaderTextSize">15dp</dimen>
+    <dimen name="chartHeaderPaddingTop">20dp</dimen>
+    <dimen name="chartHeaderPaddingRight">25dp</dimen>
 </resources>

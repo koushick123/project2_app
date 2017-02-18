@@ -36,4 +36,6 @@
     <string name="xaxis_label">Time Period</string>
     <string name="yaxis_label">Value of Stock</string>
 
+    <string name="chartHeader">Stock Performance during the week for</string>
+
 </resources>

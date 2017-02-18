@@ -2,6 +2,7 @@ package com.udacity.stockhawk.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -14,7 +15,6 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.udacity.stockhawk.R;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -101,6 +101,9 @@ public class StockDetailActivity extends Activity {
         valsComp1.add(c1e1);
         Entry c1e2 = new Entry(1f, 140000f); // 1 == quarter 2 ...
         valsComp1.add(c1e2);*/
+
+        TextView chartHeader = (TextView)findViewById(R.id.headingText);
+        chartHeader.setText(chartHeader.getText()+" "+symbol);
 
         LineDataSet setComp1 = new LineDataSet(xAxisTime, symbol);
         setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);

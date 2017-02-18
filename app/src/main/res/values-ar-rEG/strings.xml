@@ -36,4 +36,6 @@
 
     <string name="xaxis_label">فترة زمنية</string>
     <string name="yaxis_label">قيمة الأوراق المالية</string>
+
+    <string name="chartHeader">أداء الأسهم خلال الأسبوع ل</string>
 </resources>
