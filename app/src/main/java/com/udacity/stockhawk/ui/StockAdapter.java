@@ -132,18 +132,6 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
             cursor.moveToPosition(adapterPosition);
             int symbolColumn = cursor.getColumnIndex(Contract.Quote.COLUMN_SYMBOL);
             clickHandler.onClick(cursor.getString(symbolColumn), cursor.getString(Contract.Quote.POSITION_HISTORY));
-            //Timber.d("Stock symbol == "+cursor.getString(Contract.Quote.POSITION_SYMBOL));
-            StringTokenizer token = new StringTokenizer(cursor.getString(Contract.Quote.POSITION_HISTORY),"\n");
-            /*while(token.hasMoreTokens()){
-                StringTokenizer stock = new StringTokenizer(token.nextToken(),",");
-                Calendar endDate = Calendar.getInstance();
-                String stockDates = stock.nextToken();
-                endDate.setTimeInMillis(new Long(stockDates).longValue());
-                Timber.d("Stock history == "+endDate.get(Calendar.DATE)+", "+endDate.get(Calendar.MONTH)+", "+endDate.get(Calendar.YEAR));
-                Timber.d("Stock history close value== "+stock.nextToken());
-            }*/
         }
-
-
     }
 }

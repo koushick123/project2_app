@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @BindView(R.id.error)
     TextView error;
     private StockAdapter adapter;
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @Override
     public void onClick(String symbol, String history) {

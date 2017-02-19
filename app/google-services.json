@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "790824425492",
+    "firebase_url": "https://eternal-concept-137023.firebaseio.com",
+    "project_id": "eternal-concept-137023",
+    "storage_bucket": "eternal-concept-137023.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:790824425492:android:9808a16399a49d6e",
+        "android_client_info": {
+          "package_name": "com.udacity.stockhawk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "790824425492-ub7b6geoiia0rihh65kvdfth1dun69gj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQURBjXfmDmgejVzqOlPjanEsSvL867v0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
