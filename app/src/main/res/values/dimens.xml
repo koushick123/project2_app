@@ -6,4 +6,8 @@
     <dimen name="chartHeaderTextSize">15dp</dimen>
     <dimen name="chartHeaderPaddingTop">20dp</dimen>
     <dimen name="chartHeaderPaddingRight">25dp</dimen>
+    <dimen name="widgetHeight">70dp</dimen>
+    <dimen name="widgetWidth">120dp</dimen>
+    <dimen name="widgetStockTextPadLeftMarginTop">10dp</dimen>
+    <dimen name="widgetDollarPadLeft">5dp</dimen>
 </resources>

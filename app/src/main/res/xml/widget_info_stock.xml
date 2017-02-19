@@ -3,4 +3,4 @@
     android:initialLayout="@layout/widget_stock_small"
     android:minHeight="10dp"
     android:minWidth="10dp"
-    android:updatePeriodMillis="0" />
+    android:updatePeriodMillis="2000" />

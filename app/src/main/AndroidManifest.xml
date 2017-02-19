@@ -51,8 +51,6 @@
                 android:resource="@xml/widget_info_stock" />
         </receiver>
 
-        <service android:name=".sync.StockWidgetUpdateService"
-            android:exported="false" />
     </application>
 
 </manifest>

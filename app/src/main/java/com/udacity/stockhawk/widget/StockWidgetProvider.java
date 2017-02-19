@@ -6,11 +6,15 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.udacity.stockhawk.R;
+import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.sync.QuoteSyncJob;
 import com.udacity.stockhawk.sync.StockWidgetUpdateService;
 import com.udacity.stockhawk.ui.MainActivity;
@@ -35,6 +39,15 @@ public class StockWidgetProvider extends AppWidgetProvider {
                 setRemoteContentDescription(views, "Stock");
             }
 
+            Cursor stockVals = context.getContentResolver().query(Uri.parse(Contract.BASE_URI+"/quote/AAPL"),new String[]{Contract.Quote.COLUMN_PRICE},null,null,null);
+            Log.d(this.getClass().getName(),"Cursor count value == "+stockVals.getCount());
+            float updatedPrice = 0.0f;
+            if(stockVals.getCount() != 0){
+                stockVals.moveToFirst();
+                updatedPrice = stockVals.getFloat(stockVals.getColumnIndex(Contract.Quote.COLUMN_PRICE));
+            }
+            stockVals.close();
+            views.setTextViewText(R.id.stockWidget,updatedPrice+"");
             // Create an Intent to launch MainActivity
             Intent launchIntent = new Intent(context, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchIntent, 0);
@@ -53,6 +66,7 @@ public class StockWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(@NonNull Context context, @NonNull Intent intent) {
         super.onReceive(context, intent);
+        Log.d(this.getClass().getName(),"in onReceive === "+intent.getAction());
         if(QuoteSyncJob.ACTION_DATA_UPDATED.equalsIgnoreCase(intent.getAction())) {
             context.startService(new Intent(context,StockWidgetUpdateService.class));
         }
