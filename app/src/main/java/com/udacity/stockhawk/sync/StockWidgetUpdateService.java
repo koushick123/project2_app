@@ -9,8 +9,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.util.TypedValue;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
@@ -36,7 +39,20 @@ public class StockWidgetUpdateService extends IntentService {
 
         for(int appWidget : appWidgetIds)
         {
-            RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget_stock_small);
+            // Find the correct layout based on the widget's width
+            int widgetWidth = getWidgetWidth(appWidgetManager, appWidget);
+            int defaultWidth = getResources().getDimensionPixelSize(R.dimen.widget_today_default_width);
+            int largeWidth = getResources().getDimensionPixelSize(R.dimen.widget_today_large_width);
+            int layoutId;
+            if (widgetWidth >= largeWidth) {
+                layoutId = R.layout.stock_widget_large;
+            } else if (widgetWidth >= defaultWidth) {
+                layoutId = R.layout.widget_stock;
+            } else {
+                layoutId = R.layout.widget_stock_small;
+            }
+
+            RemoteViews views = new RemoteViews(getPackageName(), layoutId);
 
             //Add data to the remote widget view
             views.setImageViewResource(R.id.currencyWidget,R.drawable.ic_dollar);
@@ -46,12 +62,14 @@ public class StockWidgetUpdateService extends IntentService {
                 setRemoteContentDescription(views, "Stock");
             }
 
-            Cursor stockVals = getContentResolver().query(Uri.parse(Contract.BASE_URI+"/quote/APPL"),null,null,null,null);
+            Cursor stockVals = getContentResolver().query(Uri.parse(Contract.BASE_URI+"/quote/AAPL"),new String[]{Contract.Quote.COLUMN_PRICE},null,null,null);
+            Log.d(this.getClass().getName(),"stock widget service cursor count value == "+stockVals.getCount());
             float updatedPrice = 0.0f;
             if(stockVals.getCount() != 0){
                 stockVals.moveToFirst();
                 updatedPrice = stockVals.getFloat(stockVals.getColumnIndex(Contract.Quote.COLUMN_PRICE));
             }
+            Log.d(this.getClass().getName(),"Stock price === "+updatedPrice);
             stockVals.close();
             views.setTextViewText(R.id.stockWidget,updatedPrice+"");
 
@@ -68,5 +86,22 @@ public class StockWidgetUpdateService extends IntentService {
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
     private void setRemoteContentDescription(RemoteViews views, String description) {
         views.setContentDescription(R.id.stockWidget, description);
+    }
+
+    private int getWidgetWidth(AppWidgetManager appWidgetManager,int appWidgetId){
+        // Prior to Jelly Bean, widgets were always their default size
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            return getResources().getDimensionPixelSize(R.dimen.widgetWidth);
+        }
+
+        Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
+        if (options.containsKey(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)) {
+            int minWidthDp = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
+            // The width returned is in dp, but we'll convert it to pixels to match the other widths
+            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+            return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, minWidthDp,
+                    displayMetrics);
+        }
+        return  getResources().getDimensionPixelSize(R.dimen.widget_today_default_width);
     }
 }

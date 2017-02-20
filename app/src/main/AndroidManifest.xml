@@ -45,11 +45,15 @@
             android:label="Stock Hawk" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.example.android.sunshine.app.ACTION_DATA_UPDATED" />
+                <action android:name="com.udacity.stockhawk.ACTION_DATA_UPDATED" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info_stock" />
         </receiver>
+
+        <service
+            android:name=".sync.StockWidgetUpdateService"
+            android:exported="false" />
 
     </application>
 

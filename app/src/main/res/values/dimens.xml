@@ -10,4 +10,6 @@
     <dimen name="widgetWidth">120dp</dimen>
     <dimen name="widgetStockTextPadLeftMarginTop">10dp</dimen>
     <dimen name="widgetDollarPadLeft">5dp</dimen>
+    <dimen name="widget_today_default_width">130dp</dimen>
+    <dimen name="widget_today_large_width">200dp</dimen>
 </resources>
