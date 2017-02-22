@@ -1,11 +1,15 @@
 package com.udacity.stockhawk.ui;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -25,6 +29,8 @@ import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 import com.udacity.stockhawk.sync.QuoteSyncJob;
 
+import java.util.HashSet;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
@@ -41,7 +47,38 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @BindView(R.id.error)
     TextView error;
     private StockAdapter adapter;
+    BroadcastReceiver mReceiver;
     private final String LOG_TAG = MainActivity.class.getSimpleName();
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Timber.d(LOG_TAG,"OnStart");
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        IntentFilter intentFilter = new IntentFilter(
+                "android.intent.action.MAIN");
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                if (QuoteSyncJob.ACTION_NO_DATA.equalsIgnoreCase(intent.getAction())) {
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    HashSet<String> errors = (HashSet<String>) prefs.getStringSet("errors", null);
+                    if (errors != null) {
+                        new ErrorMessageDialog().show(getFragmentManager(), "ErrorFragment");
+                    }
+                }
+            }
+        };
+
+        this.registerReceiver(mReceiver,intentFilter);
+        Timber.d(LOG_TAG,"onPostResume");
+    }
 
     @Override
     public void onClick(String symbol, String history) {
@@ -84,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 getContentResolver().delete(Contract.Quote.makeUriForStock(symbol), null, null);
             }
         }).attachToRecyclerView(stockRecyclerView);
-
     }
 
     private boolean networkUp() {
@@ -114,6 +150,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         } else {
             error.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        this.unregisterReceiver(mReceiver);
     }
 
     public void button(View view) {

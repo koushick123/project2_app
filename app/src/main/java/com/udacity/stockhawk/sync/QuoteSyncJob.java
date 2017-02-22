@@ -6,9 +6,10 @@ import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
+import android.preference.PreferenceManager;
 
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
@@ -33,7 +34,8 @@ public final class QuoteSyncJob {
 
     private static final int ONE_OFF_ID = 2;
     public static final String ACTION_DATA_UPDATED = "com.udacity.stockhawk.ACTION_DATA_UPDATED";
-    private static final int PERIOD = 3000;
+    public static final String ACTION_NO_DATA = "com.udacity.stockhawk.ACTION_NO_DATA";
+    private static final int PERIOD = 300000;
     private static final int INITIAL_BACKOFF = 10000;
     private static final int PERIODIC_ID = 1;
     private static final int WEEKS_OF_HISTORY = 1;
@@ -70,6 +72,7 @@ public final class QuoteSyncJob {
             //Timber.d(quotes.toString());
 
             ArrayList<ContentValues> quoteCVs = new ArrayList<>();
+            ArrayList<String> invalidStocks = new ArrayList<>();
 
             while (iterator.hasNext()) {
                 String symbol = iterator.next();
@@ -78,12 +81,17 @@ public final class QuoteSyncJob {
                 Stock stock = quotes.get(symbol);
                 StockQuote quote = stock.getQuote();
 
+                if(quote.getPrice() == null || quote.getChange() == null || quote.getChangeInPercent() == null){
+                    invalidStocks.add(quote.getSymbol());
+                    continue;
+                }
                 float price = quote.getPrice().floatValue();
                 float change = quote.getChange().floatValue();
                 float percentChange = quote.getChangeInPercent().floatValue();
 
                 // WARNING! Don't request historical data for a stock that doesn't exist!
                 // The request will hang forever X_x
+                Timber.d("Stock == "+stock.getName());
                 List<HistoricalQuote> history = stock.getHistory(from, to, Interval.DAILY);
 
                 StringBuilder historyBuilder = new StringBuilder();
@@ -112,13 +120,26 @@ public final class QuoteSyncJob {
 
             }
 
-            context.getContentResolver()
-                    .bulkInsert(
-                            Contract.Quote.URI,
-                            quoteCVs.toArray(new ContentValues[quoteCVs.size()]));
+            Timber.d("Invalid stocks == "+invalidStocks);
+            if(invalidStocks != null && invalidStocks.size() > 0){
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences.Editor editor = prefs.edit();
+                HashSet<String> errorSet = new HashSet<>(invalidStocks);
+                editor.putStringSet("errors",errorSet);
+                editor.apply();
 
-            Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED);
-            context.sendBroadcast(dataUpdatedIntent);
+                Intent dataUpdatedIntent = new Intent(ACTION_NO_DATA);
+                context.sendBroadcast(dataUpdatedIntent);
+            }
+            else {
+                context.getContentResolver()
+                        .bulkInsert(
+                                Contract.Quote.URI,
+                                quoteCVs.toArray(new ContentValues[quoteCVs.size()]));
+
+                Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED);
+                context.sendBroadcast(dataUpdatedIntent);
+            }
 
         } catch (IOException exception) {
             Timber.e(exception, "Error fetching stock quotes");
