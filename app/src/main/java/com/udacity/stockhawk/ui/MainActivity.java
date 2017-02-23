@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onPostResume();
 
         IntentFilter intentFilter = new IntentFilter(
-                "android.intent.action.MAIN");
+                QuoteSyncJob.ACTION_NO_DATA);
         mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -69,8 +69,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 if (QuoteSyncJob.ACTION_NO_DATA.equalsIgnoreCase(intent.getAction())) {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     HashSet<String> errors = (HashSet<String>) prefs.getStringSet("errors", null);
-                    if (errors != null) {
-                        new ErrorMessageDialog().show(getFragmentManager(), "ErrorFragment");
+                    if (errors != null && errors.size() > 0) {
+                        ErrorMessageDialog dialog = new ErrorMessageDialog();
+                        Bundle error = new Bundle();
+                        String[] msgs = errors.toArray(new String[errors.size()]);
+                        error.putString("noSymbol",msgs[0]);
+                        dialog.setArguments(error);
+                        if(swipeRefreshLayout.isRefreshing()){
+                            Timber.d(LOG_TAG,"Stock Values Refreshing.....Need to stop");
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                        dialog.show(getFragmentManager(), "ErrorFragment");
                     }
                 }
             }

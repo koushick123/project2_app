@@ -38,4 +38,11 @@
 
     <string name="chartHeader">Stock Performance during the week for</string>
 
+    <string name="noStockMsg">No Stock Values found for symbol : </string>
+    <string name="checkValid">Please check the validity of the symbol</string>
+
+    <string name="dismiss">DISMISS</string>
+
+    <string name="errorMsgTitle">INVALID STOCK</string>
+
 </resources>

@@ -3,6 +3,7 @@ package com.udacity.stockhawk.ui;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -28,12 +29,19 @@ public class ErrorMessageDialog extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+        builder.setTitle(getResources().getString(R.string.errorMsgTitle));
+        builder.setNegativeButton(getResources().getString(R.string.dismiss), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dismiss();
+            }
+        });
         LayoutInflater inflater = LayoutInflater.from(getActivity());
-        View custom = inflater.inflate(R.layout.add_stock_dialog, null);
+        View custom = inflater.inflate(R.layout.error_dialog, null);
 
         ButterKnife.bind(this, custom);
-
-        builder.setMessage("No Stock Found");
+        Bundle nosymbol = getArguments();
+        builder.setMessage(getResources().getString(R.string.noStockMsg)+nosymbol.getString("noSymbol")+"\n\n"+getResources().getString(R.string.checkValid));
         Dialog dialog = builder.create();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());

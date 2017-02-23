@@ -38,4 +38,10 @@
     <string name="yaxis_label">قيمة الأوراق المالية</string>
 
     <string name="chartHeader">أداء الأسهم خلال الأسبوع ل</string>
+
+    <string name="noStockMsg">لا القيم سهم تم العثور عليها ل رمز : </string>
+    <string name="checkValid">يرجى التحقق من صحة الرمز</string>
+
+    <string name="dismiss">انصرف</string>
+    <string name="errorMsgTitle">الأسهم باطلة</string>
 </resources>
