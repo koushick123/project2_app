@@ -1,56 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/stockDetails"
+    tools:context=".ui.StockDetailActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    tools:context="com.udacity.stockhawk.ui.StockDetailActivity"
-    >
-
-    <TextView
-        android:layout_width="@dimen/no_width"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:id="@+id/yAxisLabel"
-        android:text="@string/yaxis_label"
-        android:paddingTop="@dimen/y_axis_label_padding_top"
-        />
-
-    <LinearLayout
-        android:layout_width="@dimen/no_width"
-        android:layout_height="match_parent"
-        android:layout_weight="9"
-        android:orientation="vertical"
-        android:id="@+id/chartView"
-        >
-
-        <TextView
-            android:id="@+id/headingText"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_gravity="center"
-            android:paddingTop="@dimen/chartHeaderPaddingTop"
-            android:paddingRight="@dimen/chartHeaderPaddingRight"
-            android:text="@string/chartHeader"
-            android:textSize="@dimen/chartHeaderTextSize"
-            />
-
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/chart"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/no_width"
-            android:layout_weight="8"
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/no_width"
-            android:id="@+id/xAxisLabel"
-            android:textAlignment="center"
-            android:layout_weight="1"
-            android:text="@string/xaxis_label"
-            />
-    </LinearLayout>
-
-</LinearLayout>
+    tools:ignore="MergeRootFrame" />
