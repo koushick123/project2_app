@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -36,7 +37,14 @@ public class StockFragmentDetail extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_stock_detail,container,false);
 
+        TextView textView = (TextView)rootView.findViewById(R.id.noStockText);
+        LinearLayout linearLayout = (LinearLayout)rootView.findViewById(R.id.stockChart);
+
         if(getArguments() != null){
+            if(textView != null) {
+                textView.setVisibility(View.INVISIBLE);
+            }
+            linearLayout.setVisibility(View.VISIBLE);
             String symbol = getArguments().getString("symbol");
             String history = getArguments().getString("history");
             Timber.d("symbol == " + symbol);
@@ -143,6 +151,12 @@ public class StockFragmentDetail extends Fragment {
             LineData data = new LineData(dataSets);
             chart.setData(data);
             chart.invalidate(); // refresh*/
+        }
+        else{
+            if(textView != null) {
+                textView.setVisibility(View.VISIBLE);
+            }
+            linearLayout.setVisibility(View.INVISIBLE);
         }
         return rootView;
     }

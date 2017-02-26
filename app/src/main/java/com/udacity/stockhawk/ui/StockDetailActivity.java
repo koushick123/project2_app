@@ -23,7 +23,7 @@ public class StockDetailActivity extends AppCompatActivity {
             stock.putString("history",getIntent().getStringExtra("history"));
             stockDetailFragment.setArguments(stock);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.stockFragmentDetail, stockDetailFragment, null)
+                    .add(R.id.stockDetails, stockDetailFragment, null)
                     .commit();
         }
     }

@@ -43,6 +43,7 @@
 
     <string name="dismiss">DISMISS</string>
 
+    <string name="noStockSelection">No Stock Symbol has been selected</string>
     <string name="errorMsgTitle">INVALID STOCK</string>
 
 </resources>

@@ -32,37 +32,26 @@ public class MainActivity extends AppCompatActivity implements StockFragment.Cal
         Log.d(LOG_TAG,"inside Oncreate");
         setContentView(R.layout.activity_main);
         Log.d(LOG_TAG,"after setcontentview");
-        ButterKnife.bind(this);
-
-        StockFragment stockFragment = (StockFragment)getSupportFragmentManager().findFragmentById(R.id.stockFragment);
-        Log.d(LOG_TAG,"stockFragment == "+stockFragment);
-        if(stockFragment != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.stockFragment, stockFragment, null)
-                    .commit();
-        }
-        else{
-            getSupportFragmentManager().beginTransaction()
-                    .add(new StockFragment(),null)
-                    .commit();
-        }
 
         if(findViewById(R.id.stockFragmentDetail) != null){
 
-            StockFragmentDetail stockFragmentDetail = (StockFragmentDetail) getSupportFragmentManager().findFragmentById(R.id.stockFragmentDetail);
-            Log.d(LOG_TAG,"stockFragmentDetail == "+stockFragmentDetail);
-
-            if(stockFragmentDetail != null) {
+            if(savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.stockFragmentDetail, stockFragmentDetail, null)
+                        .replace(R.id.stockFragmentDetail, new StockFragmentDetail(), null)
                         .commit();
-            }
-            else{
+
                 getSupportFragmentManager().beginTransaction()
-                        .add(new StockFragmentDetail(),null)
+                        .replace(R.id.stockFragment, new StockFragment(), null)
                         .commit();
             }
             tablet_mode=true;
+        }
+        else{
+            if(savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.stockFragment, new StockFragment(), null)
+                        .commit();
+            }
         }
     }
 
@@ -110,6 +99,18 @@ public class MainActivity extends AppCompatActivity implements StockFragment.Cal
             PrefUtils.toggleDisplayMode(this);
             setDisplayModeMenuItemIcon(item);
             //adapter.notifyDataSetChanged();
+            StockFragment fragment = (StockFragment) getSupportFragmentManager().findFragmentById(R.id.stockFragment);
+            Timber.d(LOG_TAG,"fragment for setting == "+fragment);
+            if(fragment != null){
+                fragment.onSettingChange();
+            }
+            else{
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.stockFragment,new StockFragment(),null)
+                        .commit();
+                fragment = (StockFragment) getSupportFragmentManager().findFragmentById(R.id.stockFragment);
+                fragment.onSettingChange();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);

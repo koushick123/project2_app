@@ -43,5 +43,6 @@
     <string name="checkValid">يرجى التحقق من صحة الرمز</string>
 
     <string name="dismiss">انصرف</string>
+    <string name="noStockSelection">ولم يتم اختيار الأسهم رمز</string>
     <string name="errorMsgTitle">الأسهم باطلة</string>
 </resources>

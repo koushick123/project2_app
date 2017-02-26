@@ -11,6 +11,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -45,7 +46,7 @@ public class StockFragment extends Fragment implements LoaderManager.LoaderCallb
 
     private static final int STOCK_LOADER = 0;
     RecyclerView stockRecyclerView;
-    @BindView(R.id.swipe_refresh)    SwipeRefreshLayout swipeRefreshLayout;
+    SwipeRefreshLayout swipeRefreshLayout;
     TextView error;
     private StockAdapter adapter;
     BroadcastReceiver mReceiver;
@@ -55,9 +56,8 @@ public class StockFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_stock,container,false);
-        ButterKnife.bind(getActivity());
         adapter = new StockAdapter(getActivity().getApplicationContext(),this);
-        //stockRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        stockRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         stockRecyclerView.setAdapter(adapter);
         stockRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
 
@@ -92,15 +92,17 @@ public class StockFragment extends Fragment implements LoaderManager.LoaderCallb
         void onItemClick(String symbol, String history);
     }
 
+    public void onSettingChange(){
+        if(adapter != null && adapter.getItemCount() > 0) {
+            adapter.notifyDataSetChanged();
+        }
+    }
+
     @Override
     public void onClick(String symbol, String history) {
         Timber.d("Symbol clicked: %s", symbol);
         Timber.d("History of stock: %s", history);
         ((Callback)getActivity()).onItemClick(symbol,history);
-        /*Intent stockDetail = new Intent(this, StockDetailActivity.class);
-        stockDetail.putExtra("symbol",symbol);
-        stockDetail.putExtra("history",history);
-        startActivity(stockDetail);*/
     }
 
     @Override
