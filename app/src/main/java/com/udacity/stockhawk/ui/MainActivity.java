@@ -2,6 +2,7 @@ package com.udacity.stockhawk.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements StockFragment.Cal
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private boolean tablet_mode = false;
+    private String STOCK_DETAIL_TAG = "STOCK_DETAIL_FRAGMENT_TAG";
 
     @Override
     protected void onStart() {
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements StockFragment.Cal
 
             if(savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.stockFragmentDetail, new StockFragmentDetail(), null)
+                        .replace(R.id.stockFragmentDetail, new StockFragmentDetail(), STOCK_DETAIL_TAG)
                         .commit();
 
                 getSupportFragmentManager().beginTransaction()
@@ -117,6 +119,20 @@ public class MainActivity extends AppCompatActivity implements StockFragment.Cal
     }
 
     @Override
+    public void onDelete()
+    {
+        if(tablet_mode) {
+            Log.d(LOG_TAG, "inside OnDelete");
+            StockFragmentDetail detail = (StockFragmentDetail) getSupportFragmentManager().findFragmentByTag(STOCK_DETAIL_TAG);
+            Log.d(LOG_TAG, "Detail fragment == " + detail);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.remove(detail);
+            fragmentTransaction.add(R.id.stockFragmentDetail, new StockFragmentDetail(), STOCK_DETAIL_TAG)
+                    .commit();
+        }
+    }
+
+    @Override
     public void onItemClick(String symbol, String history)
     {
         if(tablet_mode){
@@ -126,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements StockFragment.Cal
             args.putString("history",history);
             stockFragmentDetail.setArguments(args);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.stockFragmentDetail,stockFragmentDetail,null)
+                    .replace(R.id.stockFragmentDetail,stockFragmentDetail,STOCK_DETAIL_TAG)
                     .commit();
         }
         else{

@@ -156,7 +156,7 @@ public class StockFragmentDetail extends Fragment {
             if(textView != null) {
                 textView.setVisibility(View.VISIBLE);
             }
-            linearLayout.setVisibility(View.INVISIBLE);
+            linearLayout.setVisibility(View.GONE);
         }
         return rootView;
     }

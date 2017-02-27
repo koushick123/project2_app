@@ -82,6 +82,7 @@ public class StockFragment extends Fragment implements LoaderManager.LoaderCallb
                         String symbol = adapter.getSymbolAtPosition(viewHolder.getAdapterPosition());
                         PrefUtils.removeStock(getActivity(), symbol);
                         getActivity().getContentResolver().delete(Contract.Quote.makeUriForStock(symbol), null, null);
+                            ((Callback)getActivity()).onDelete();
                     }
             }).attachToRecyclerView(stockRecyclerView);
         return rootView;
@@ -90,6 +91,7 @@ public class StockFragment extends Fragment implements LoaderManager.LoaderCallb
     public interface Callback
     {
         void onItemClick(String symbol, String history);
+        void onDelete();
     }
 
     public void onSettingChange(){
