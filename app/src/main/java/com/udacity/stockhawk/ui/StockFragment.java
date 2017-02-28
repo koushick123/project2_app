@@ -45,6 +45,7 @@ public class StockFragment extends Fragment implements LoaderManager.LoaderCallb
         StockAdapter.StockAdapterOnClickHandler{
 
     private static final int STOCK_LOADER = 0;
+    public static final String ACTION_DATA_UPDATED = "com.udacity.stockhawk.ACTION_DATA_UPDATED";
     RecyclerView stockRecyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
     TextView error;
@@ -83,6 +84,8 @@ public class StockFragment extends Fragment implements LoaderManager.LoaderCallb
                         PrefUtils.removeStock(getActivity(), symbol);
                         getActivity().getContentResolver().delete(Contract.Quote.makeUriForStock(symbol), null, null);
                             ((Callback)getActivity()).onDelete();
+                        Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED);
+                        getContext().sendBroadcast(dataUpdatedIntent);
                     }
             }).attachToRecyclerView(stockRecyclerView);
         return rootView;

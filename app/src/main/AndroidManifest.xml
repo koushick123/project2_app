@@ -51,9 +51,13 @@
                 android:resource="@xml/widget_info_stock" />
         </receiver>
 
-        <service
+        <!--<service
             android:name=".sync.StockWidgetUpdateService"
-            android:exported="false" />
+            android:exported="false" />-->
+
+        <service
+            android:name=".sync.StockWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
     </application>
 
