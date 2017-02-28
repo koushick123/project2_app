@@ -15,13 +15,10 @@ import com.udacity.stockhawk.data.PrefUtils;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Calendar;
 import java.util.Locale;
-import java.util.StringTokenizer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
 
@@ -69,7 +66,6 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
 
         cursor.moveToPosition(position);
 
-
         holder.symbol.setText(cursor.getString(Contract.Quote.POSITION_SYMBOL));
         holder.price.setText(dollarFormat.format(cursor.getFloat(Contract.Quote.POSITION_PRICE)));
 
@@ -91,8 +87,6 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
         } else {
             holder.change.setText(percentage);
         }
-
-
     }
 
     @Override

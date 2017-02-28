@@ -8,5 +8,6 @@
     <color name="material_red_700">#D50000</color>
     <color name="material_green_700">#00C853</color>
     <color name="yellow">#FEF343</color>
+    <color name="stock_selected">#eff704</color>
 
 </resources>
