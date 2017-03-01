@@ -56,7 +56,7 @@ public class StockWidgetDataProvider implements RemoteViewsService.RemoteViewsFa
         Bundle extras = new Bundle();
         extras.putInt(STOCK_ACTION, position);
         i.putExtras(extras);
-        remoteViews.setOnClickFillInIntent(R.id.stockWidgetListRoot,i);
+        remoteViews.setOnClickFillInIntent(R.id.stockWidgetEntry,i);
         return remoteViews;
     }
 
