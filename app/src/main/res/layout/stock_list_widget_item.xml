@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center_vertical"
     android:orientation="horizontal"
+    android:id="@+id/stockWidgetEntry"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,9 +12,16 @@
         style="@style/StockSymbolTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="start"
+        android:layout_gravity="start"
         android:paddingEnd="@dimen/widget_stock_end"
         tools:text="GOOG" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_dollar"
+        android:paddingEnd="@dimen/widget_dollar_end"
+        />
 
     <TextView
         android:id="@+id/listPrice"

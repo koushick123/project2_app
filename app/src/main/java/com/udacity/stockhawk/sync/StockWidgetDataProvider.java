@@ -2,9 +2,10 @@ package com.udacity.stockhawk.sync;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.UriPermission;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Binder;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -22,7 +23,8 @@ import java.util.List;
 public class StockWidgetDataProvider implements RemoteViewsService.RemoteViewsFactory {
 
     List<StockWidgetItem> mCollections = new ArrayList<>();
-
+    private static final String STOCK_ACTION = "STOCK_ACTION";
+    private final String LOG_TAG = this.getClass().getName();
     Context mContext = null;
 
     public StockWidgetDataProvider(Context context, Intent intent) {
@@ -50,6 +52,11 @@ public class StockWidgetDataProvider implements RemoteViewsService.RemoteViewsFa
         Log.d(this.getClass().getName(),"Position  == "+position);
         remoteViews.setTextViewText(R.id.listSymbol,mCollections.get(position).getSymbol());
         remoteViews.setTextViewText(R.id.listPrice,mCollections.get(position).getPrice());
+        Intent i = new Intent();
+        Bundle extras = new Bundle();
+        extras.putInt(STOCK_ACTION, position);
+        i.putExtras(extras);
+        remoteViews.setOnClickFillInIntent(R.id.stockWidgetListRoot,i);
         return remoteViews;
     }
 
@@ -81,25 +88,31 @@ public class StockWidgetDataProvider implements RemoteViewsService.RemoteViewsFa
 
     private void refreshData()
     {
-        Cursor stockVals = mContext.getContentResolver().query(Uri.parse(Contract.BASE_URI+"/quote"),new String[]{Contract.Quote.COLUMN_SYMBOL,Contract.Quote.COLUMN_PRICE},null,null,null);
-        Log.d(this.getClass().getName(),"Cursor count value == "+stockVals.getCount());
-        if(stockVals.getCount() > 0)
-        {
-            try {
-                if(stockVals.moveToFirst()) {
-                    do{
+        final long identityToken = Binder.clearCallingIdentity();
+        Cursor stockVals = null;
+        try {
+            stockVals = mContext.getContentResolver().query(Uri.parse(Contract.BASE_URI + "/quote"), new String[]{Contract.Quote.COLUMN_SYMBOL, Contract.Quote.COLUMN_PRICE}, null, null, null);
+            Log.d(LOG_TAG, "Cursor count value == " + stockVals.getCount());
+            if (stockVals.getCount() > 0) {
+                if (stockVals.moveToFirst()) {
+                    mCollections.clear();
+                    Log.d(LOG_TAG, "Cleared previous data");
+                    do {
                         StockWidgetItem stockWidgetItem = new StockWidgetItem();
                         stockWidgetItem.setPrice(stockVals.getFloat(stockVals.getColumnIndex(Contract.Quote.COLUMN_PRICE)) + "");
                         stockWidgetItem.setSymbol(stockVals.getString(stockVals.getColumnIndex(Contract.Quote.COLUMN_SYMBOL)));
                         mCollections.add(stockWidgetItem);
-                    }while (stockVals.moveToNext());
-                }else{
-                    Log.d(this.getClass().getName(),"Unable to read from cursor");
+                    } while (stockVals.moveToNext());
+                } else {
+                    Log.d(LOG_TAG, "Unable to read from cursor");
                 }
             }
-            finally{
+        }
+        finally {
+            if(stockVals != null){
                 stockVals.close();
             }
+            Binder.restoreCallingIdentity(identityToken);
         }
     }
 }
