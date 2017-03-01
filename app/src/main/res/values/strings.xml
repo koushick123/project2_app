@@ -46,4 +46,6 @@
     <string name="noStockSelection">No Stock Symbol has been selected</string>
     <string name="errorMsgTitle">INVALID STOCK</string>
 
+    <string name="error_no_stocks_widget">No stocks added! Open the application to add one.</string>
+
 </resources>

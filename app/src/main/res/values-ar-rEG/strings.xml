@@ -45,4 +45,6 @@
     <string name="dismiss">انصرف</string>
     <string name="noStockSelection">ولم يتم اختيار الأسهم رمز</string>
     <string name="errorMsgTitle">الأسهم باطلة</string>
+
+    <string name="error_no_stocks_widget">وأضافت يوجد مخزون! فتح التطبيق لإضافة واحد</string>
 </resources>

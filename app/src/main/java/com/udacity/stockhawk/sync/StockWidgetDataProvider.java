@@ -14,8 +14,11 @@ import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.StockWidgetItem;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by koushick on 28-Feb-17.
@@ -49,14 +52,16 @@ public class StockWidgetDataProvider implements RemoteViewsService.RemoteViewsFa
     @Override
     public RemoteViews getViewAt(int position) {
         RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.stock_list_widget_item);
-        Log.d(this.getClass().getName(),"Position  == "+position);
-        remoteViews.setTextViewText(R.id.listSymbol,mCollections.get(position).getSymbol());
-        remoteViews.setTextViewText(R.id.listPrice,mCollections.get(position).getPrice());
+        Log.d(this.getClass().getName(),"Position  == "+position+", count == "+getCount());
+        if(getCount() > 0) {
+            remoteViews.setTextViewText(R.id.listSymbol, mCollections.get(position).getSymbol());
+            remoteViews.setTextViewText(R.id.listPrice, mCollections.get(position).getPrice());
+        }
         Intent i = new Intent();
         Bundle extras = new Bundle();
         extras.putInt(STOCK_ACTION, position);
         i.putExtras(extras);
-        remoteViews.setOnClickFillInIntent(R.id.stockWidgetEntry,i);
+        remoteViews.setOnClickFillInIntent(R.id.stockWidgetEntry, i);
         return remoteViews;
     }
 
@@ -99,13 +104,19 @@ public class StockWidgetDataProvider implements RemoteViewsService.RemoteViewsFa
                     Log.d(LOG_TAG, "Cleared previous data");
                     do {
                         StockWidgetItem stockWidgetItem = new StockWidgetItem();
-                        stockWidgetItem.setPrice(stockVals.getFloat(stockVals.getColumnIndex(Contract.Quote.COLUMN_PRICE)) + "");
+                        DecimalFormat dollarFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.getDefault());
+                        stockWidgetItem.setPrice(dollarFormat.format(stockVals.getFloat(stockVals.getColumnIndex(Contract.Quote.COLUMN_PRICE))) + "");
                         stockWidgetItem.setSymbol(stockVals.getString(stockVals.getColumnIndex(Contract.Quote.COLUMN_SYMBOL)));
                         mCollections.add(stockWidgetItem);
                     } while (stockVals.moveToNext());
                 } else {
                     Log.d(LOG_TAG, "Unable to read from cursor");
                 }
+            }
+            else if(stockVals.getCount() == 0){
+                mCollections.clear();
+                RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.stock_list_widget_item);
+                remoteViews.setEmptyView(R.id.stockWidgetList,R.id.emptyStock);
             }
         }
         finally {

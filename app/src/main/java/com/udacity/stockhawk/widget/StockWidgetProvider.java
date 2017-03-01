@@ -47,6 +47,7 @@ public class StockWidgetProvider extends AppWidgetProvider {
             views.setPendingIntentTemplate(R.id.stockWidgetList, clickPI);
 
             // Tell the AppWidgetManager to perform an update on the current app widget
+            appWidgetManager.updateAppWidget(appWidget,views);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidget,R.id.stockWidgetList);
         }
         super.onUpdate(context,appWidgetManager,appWidgetIds);
@@ -60,7 +61,9 @@ public class StockWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(@NonNull Context context, @NonNull Intent intent) {
         Log.d(this.getClass().getName(),"in onReceive === "+intent.getAction());
-        if(QuoteSyncJob.ACTION_DATA_UPDATED.equalsIgnoreCase(intent.getAction()))
+        if(QuoteSyncJob.ACTION_DATA_UPDATED.equalsIgnoreCase(intent.getAction())
+                || AppWidgetManager.ACTION_APPWIDGET_UPDATE.equalsIgnoreCase(intent.getAction())
+                || AppWidgetManager.ACTION_APPWIDGET_ENABLED.equalsIgnoreCase(intent.getAction()))
         {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             int appWidgetIds[] = appWidgetManager.getAppWidgetIds(new ComponentName(context, this.getClass()));
