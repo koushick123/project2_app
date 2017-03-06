@@ -49,6 +49,8 @@ public final class PrefUtils {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(key);
+        editor.apply();
         editor.putStringSet(key, stocks);
         editor.apply();
     }

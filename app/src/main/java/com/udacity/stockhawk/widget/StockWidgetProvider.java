@@ -31,6 +31,7 @@ public class StockWidgetProvider extends AppWidgetProvider {
         for(int appWidget : appWidgetIds)
         {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.stock_widget_layout);
+            views.setEmptyView(R.id.stockWidgetList, R.id.emptyStock);
 
             // Content Descriptions for RemoteViews were only added in ICS MR1
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {

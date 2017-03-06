@@ -16,19 +16,13 @@
         android:paddingEnd="@dimen/widget_stock_end"
         tools:text="GOOG" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_dollar"
-        android:paddingEnd="@dimen/widget_dollar_end"
-        />
-
     <TextView
         android:id="@+id/listPrice"
         style="@style/BidPriceTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
+        android:textColor="@android:color/holo_blue_bright"
         tools:text="1000.00" />
 
 </LinearLayout>
